@@ -1,0 +1,1 @@
+export { HeicConverter } from './HeicConverter';

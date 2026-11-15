@@ -1,0 +1,790 @@
+/**
+ * Chimes AI Design System — Design Tokens
+ * =========================================
+ * 三層繼承架構：
+ *   Layer 1  chimes-ref-*   基礎原子值（色階、尺寸原始數值）
+ *   Layer 2  chimes-sys-*   語意化角色（用途定義，主題切換只改這層）
+ *   Layer 3  chimes-comp-*  元件專屬屬性（繼承 sys，不可跳層引用 ref）
+ *
+ * 使用原則：
+ *   - 元件樣式只引用 var(--chimes-comp-*) 或 var(--chimes-sys-*)
+ *   - 主題切換只需覆蓋 --chimes-sys-* 區段
+ *   - --chimes-ref-* 永遠不直接用於元件
+ */
+
+/* ============================================================
+   LAYER 1 — REF TOKENS（基礎原子值）
+   定義所有原始數值，不帶語意，供 sys 層引用。
+   ============================================================ */
+
+:root {
+
+  /* ----------------------------------------------------------
+     REF · COLOR · GRAY（中性灰色階）
+     無彩度色系，構成介面 80% 的色彩骨架。
+     來源：OKLCH chroma=0，對應 shadcn 預設色票。
+     ---------------------------------------------------------- */
+  --chimes-ref-color-gray-0:   #FFFFFF; /* 純白 */
+  --chimes-ref-color-gray-50:  #F6F7FA; /* 頁面底色（淺色主題）oklch(0.992 0 0) */
+  --chimes-ref-color-gray-100: #FFFFFF; /* Secondary / Muted 填色 oklch(1 0 0) */
+  --chimes-ref-color-gray-200: #DBDDE0; /* 邊框、分隔線 oklch(0.922 0 0) */
+  --chimes-ref-color-gray-300: #D4D4D8; /* 禁用邊框 oklch(0.87 0 0) */
+  --chimes-ref-color-gray-400: #A1A1AA; /* Placeholder、停用前景 oklch(0.708 0 0) */
+  --chimes-ref-color-gray-500: #71717A; /* 輔助說明文字 oklch(0.556 0 0) */
+  --chimes-ref-color-gray-600: #52525B; /* 停用文字 oklch(0.45 0 0) */
+  --chimes-ref-color-gray-700: #3F3F46; /* 深色模式次要文字 */
+  --chimes-ref-color-gray-800: #27272A; /* 深色模式 Surface oklch(0.269 0 0) */
+  --chimes-ref-color-gray-900: #18181B; /* 主色（淺色主題 Primary）oklch(0.205 0 0) */
+  --chimes-ref-color-gray-950: #09090B; /* 頁面底色（深色主題）oklch(0.145 0 0) */
+
+  /* ----------------------------------------------------------
+     REF · COLOR · BRAND PRIMARY ⚑ 客製化
+     Chimes AI 品牌主色，由預設 #18181B 改為品牌藍 #046AFB。
+     此 token 為客製化覆蓋，不屬於 gray 或 blue 系統色階。
+     ---------------------------------------------------------- */
+  --chimes-ref-color-brand-primary: #046AFB; /* ⚑ 客製化：Chimes AI 品牌主色 */
+
+  /* ----------------------------------------------------------
+     REF · COLOR · BLUE（品牌藍色階）
+     飽和藍系，用於品牌主題、圖表數列、資訊提示。
+     來源：OKLCH hue≈264，對應 shadcn blue theme。
+     ---------------------------------------------------------- */
+  --chimes-ref-color-blue-50:  #EFF6FF; /* 極淺藍背景 */
+  --chimes-ref-color-blue-100: #DBEAFE; /* 淺藍填色 */
+  --chimes-ref-color-blue-200: #BFDBFE; /* 藍色邊框（輕） */
+  --chimes-ref-color-blue-300: #93C5FD; /* Chart-1 oklch(0.809 0.105 251) */
+  --chimes-ref-color-blue-400: #60A5FA; /* Chart-2 oklch(0.623 0.214 259) */
+  --chimes-ref-color-blue-500: #3B82F6; /* Chart-3 oklch(0.546 0.245 262) */
+  --chimes-ref-color-blue-600: #2563EB; /* 品牌主色 / Chart-4 oklch(0.488 0.243 264) */
+  --chimes-ref-color-blue-700: #1D4ED8; /* 深藍 Chart-5 oklch(0.424 0.199 265) */
+  --chimes-ref-color-blue-800: #1E40AF; /* 深藍背景 */
+  --chimes-ref-color-blue-900: #1E3A8A; /* 最深藍 */
+
+  /* ----------------------------------------------------------
+     REF · COLOR · RED（錯誤 / 危險色階）
+     唯一高飽和警示色，用於 Destructive、Error、Delete 操作。
+     來源：OKLCH hue≈27，對應 shadcn destructive。
+     ---------------------------------------------------------- */
+  --chimes-ref-color-red-50:  #FEF2F2; /* 錯誤輕量背景 */
+  --chimes-ref-color-red-100: #FEE2E2; /* 錯誤淺色填色 */
+  --chimes-ref-color-red-200: #FECACA; /* 錯誤邊框（輕） */
+  --chimes-ref-color-red-300: #FCA5A5; /* 錯誤中淺色 */
+  --chimes-ref-color-red-400: #F87171; /* Destructive 深色主題 oklch(0.704 0.191 22) */
+  --chimes-ref-color-red-500: #EF4444; /* Error 主色（淺色主題） */
+  --chimes-ref-color-red-600: #DC2626; /* Destructive 淺色主題 oklch(0.58 0.22 27) */
+  --chimes-ref-color-red-700: #B91C1C; /* 深紅強調 */
+  --chimes-ref-color-red-800: #991B1B;
+  --chimes-ref-color-red-900: #7F1D1D; /* 最深紅 */
+
+  /* ----------------------------------------------------------
+     REF · COLOR · GREEN（成功狀態色階）
+     用於成功提示、完成狀態、正向回饋。
+     ---------------------------------------------------------- */
+  --chimes-ref-color-green-50:  #F0FDF4; /* 成功輕量背景 */
+  --chimes-ref-color-green-100: #DCFCE7; /* 成功淺色填色 */
+  --chimes-ref-color-green-200: #BBF7D0; /* 成功邊框（輕） */
+  --chimes-ref-color-green-300: #86EFAC;
+  --chimes-ref-color-green-400: #4ADE80;
+  --chimes-ref-color-green-500: #22C55E; /* Success 主色（淺色主題） */
+  --chimes-ref-color-green-600: #16A34A; /* Success 主色（深色主題） */
+  --chimes-ref-color-green-700: #15803D;
+  --chimes-ref-color-green-800: #166534;
+  --chimes-ref-color-green-900: #14532D; /* 最深綠 */
+
+  /* ----------------------------------------------------------
+     REF · COLOR · AMBER（警告狀態色階）
+     用於警告提示、需注意的操作、降級通知。
+     ---------------------------------------------------------- */
+  --chimes-ref-color-amber-50:  #FFFBEB; /* 警告輕量背景 */
+  --chimes-ref-color-amber-100: #FEF3C7; /* 警告淺色填色 */
+  --chimes-ref-color-amber-200: #FDE68A; /* 警告邊框（輕） */
+  --chimes-ref-color-amber-300: #FCD34D;
+  --chimes-ref-color-amber-400: #FBBF24;
+  --chimes-ref-color-amber-500: #F59E0B; /* Warning 主色 */
+  --chimes-ref-color-amber-600: #D97706; /* Warning 深色，確保對比度 */
+  --chimes-ref-color-amber-700: #B45309;
+  --chimes-ref-color-amber-800: #92400E;
+  --chimes-ref-color-amber-900: #78350F; /* 最深橘黃 */
+
+  /* ----------------------------------------------------------
+     REF · SPACING（間距原始值，基準單位：4px）
+     所有數值為 4px 的整數倍，對應 Tailwind spacing scale。
+     ---------------------------------------------------------- */
+  --chimes-ref-spacing-0:    0px;   /* 無間距 */
+  --chimes-ref-spacing-0-5:  2px;   /* 微小間距（徽章垂直內距） */
+  --chimes-ref-spacing-1:    4px;   /* 最小間距 */
+  --chimes-ref-spacing-1-5:  6px;   /* 圖示與文字間距 */
+  --chimes-ref-spacing-2:    8px;   /* 元素間基本間距 */
+  --chimes-ref-spacing-2-5:  10px;  /* 按鈕水平內距、輸入框內距 */
+  --chimes-ref-spacing-3:    12px;  /* 小卡片內距、緊湊欄位間距 */
+  --chimes-ref-spacing-3-5:  14px;
+  --chimes-ref-spacing-4:    16px;  /* 卡片標準內距、區塊分隔 */
+  --chimes-ref-spacing-5:    20px;  /* 表單群組間距 */
+  --chimes-ref-spacing-6:    24px;  /* 區塊間距、頁面手機 padding */
+  --chimes-ref-spacing-7:    28px;
+  --chimes-ref-spacing-8:    32px;  /* 頁面桌機 padding、區段分隔 */
+  --chimes-ref-spacing-10:   40px;
+  --chimes-ref-spacing-12:   48px;  /* 主要區段間距 */
+  --chimes-ref-spacing-16:   64px;  /* 頁面頂部大型留白 */
+
+  /* ----------------------------------------------------------
+     REF · RADIUS（圓角原始值）
+     基準值 10px，等比縮放形成體系。
+     對應 shadcn --radius: 0.625rem 計算結果。
+     ---------------------------------------------------------- */
+  --chimes-ref-radius-none: 0px;    /* 直角，禁止在一般元件使用 */
+  --chimes-ref-radius-sm:   6px;    /* × 0.6，內嵌 Tag、小型元素 */
+  --chimes-ref-radius-md:   8px;    /* × 0.8，表單控制項 */
+  --chimes-ref-radius-lg:   10px;   /* × 1.0，基準，按鈕 / Tab */
+  --chimes-ref-radius-xl:   14px;   /* × 1.4，卡片 / 面板 */
+  --chimes-ref-radius-2xl:  18px;   /* × 1.8，Modal / 抽屜 */
+  --chimes-ref-radius-3xl:  22px;   /* × 2.2，大型疊加層 */
+  --chimes-ref-radius-4xl:  26px;   /* × 2.6，超大容器 */
+  --chimes-ref-radius-pill: 9999px; /* 全圓角，徽章 / 狀態標籤 */
+
+  /* ----------------------------------------------------------
+     REF · BORDER-WIDTH（邊框粗細）
+     ---------------------------------------------------------- */
+  --chimes-ref-border-width-0: 0px;  /* 無邊框（佔位用 transparent 而非 none） */
+  --chimes-ref-border-width-1: 1px;  /* 標準邊框（絕大多數元件） */
+  --chimes-ref-border-width-2: 2px;  /* 強調邊框（選中狀態、重要提示） */
+  --chimes-ref-border-width-4: 4px;  /* 粗邊框（左側強調線、進度條） */
+
+  /* ----------------------------------------------------------
+     REF · FONT-SIZE（字級原始值）
+     ---------------------------------------------------------- */
+  --chimes-ref-font-size-xs:   0.75rem;    /* 12px — 密集資訊、徽章 */
+  --chimes-ref-font-size-sm:   0.875rem;   /* 14px — 主流字級（按鈕、內文） */
+  --chimes-ref-font-size-base: 1rem;       /* 16px — 標題、卡片 title */
+  --chimes-ref-font-size-lg:   1.125rem;   /* 18px — 區塊標題 */
+  --chimes-ref-font-size-xl:   1.25rem;    /* 20px */
+  --chimes-ref-font-size-2xl:  1.5rem;     /* 24px — 頁面大標 */
+
+  /* ----------------------------------------------------------
+     REF · FONT-WEIGHT（字重原始值）
+     僅使用兩個值，避免層次混淆。
+     ---------------------------------------------------------- */
+  --chimes-ref-font-weight-normal: 400; /* 內文、說明文字 */
+  --chimes-ref-font-weight-medium: 500; /* 按鈕、標籤、標題 */
+
+  /* ----------------------------------------------------------
+     REF · LINE-HEIGHT（行高原始值）
+     ---------------------------------------------------------- */
+  --chimes-ref-line-height-tight:  1.3; /* 大標 Display */
+  --chimes-ref-line-height-snug:   1.4; /* 標題、標籤 */
+  --chimes-ref-line-height-normal: 1.5; /* 內文（可讀性最佳） */
+  --chimes-ref-line-height-code:   1.6; /* 程式碼區塊 */
+
+  /* ----------------------------------------------------------
+     REF · SHADOW（陰影原始值）
+     B2B 工具使用輕微陰影，強調層次但不誇張。
+     ---------------------------------------------------------- */
+  --chimes-ref-shadow-none: none;
+  --chimes-ref-shadow-sm:   0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  /* 卡片標準陰影 */
+  --chimes-ref-shadow-md:   0 4px 6px -1px rgba(0, 0, 0, 0.07),
+                             0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  /* Modal、抽屜陰影 */
+  --chimes-ref-shadow-lg:   0 10px 15px -3px rgba(0, 0, 0, 0.08),
+                             0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  /* 下拉選單、Popover 陰影 */
+  --chimes-ref-shadow-xl:   0 20px 25px -5px rgba(0, 0, 0, 0.08),
+                             0 10px 10px -5px rgba(0, 0, 0, 0.03);
+}
+
+
+/* ============================================================
+   LAYER 2 — SYS TOKENS（語意化角色）· 淺色主題（預設）
+   每個 token 描述「用途」，數值引用 ref 層。
+   ⚠️  主題切換只覆蓋這一層，comp 層自動跟隨。
+   ============================================================ */
+
+:root {
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · SURFACE（頁面與容器底色）
+     建立雙層視覺空間：background（底）→ surface（容器）
+     ---------------------------------------------------------- */
+  --chimes-sys-color-background:    var(--chimes-ref-color-gray-50);
+  /* 頁面最底層背景色 */
+  --chimes-sys-color-surface:       var(--chimes-ref-color-gray-0);
+  /* 卡片、面板、輸入框的底色，比 background 亮一層 */
+  --chimes-sys-color-surface-raised: var(--chimes-ref-color-gray-0);
+  /* 彈出層（Dropdown、Popover）底色，搭配 shadow 區分層次 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · FOREGROUND（文字與內容色）
+     三個層次：主文字 → 輔助文字 → 停用文字
+     ---------------------------------------------------------- */
+  --chimes-sys-color-foreground:          var(--chimes-ref-color-gray-950);
+  /* 主要文字色：頁面內文、表格資料 */
+  --chimes-sys-color-foreground-subtle:   var(--chimes-ref-color-gray-500);
+  /* 輔助說明文字、Placeholder、時間戳 */
+  --chimes-sys-color-foreground-disabled: var(--chimes-ref-color-gray-400);
+  /* 停用狀態文字、不可互動元素的標籤 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · PRIMARY（主要操作色）
+     最高優先級的互動色，用於主要按鈕、強調元素。
+     淺色主題：深黑 ↔ 深色主題：近白（自動翻轉）
+     ---------------------------------------------------------- */
+  --chimes-sys-color-primary:    var(--chimes-ref-color-brand-primary); /* ⚑ 客製化：原為 gray-900，改為品牌主色 */
+  /* Primary 元件的背景 / 填色 */
+  --chimes-sys-color-on-primary: var(--chimes-ref-color-gray-50);
+  /* Primary 背景上的文字與圖示，確保對比度 ≥ 4.5:1 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · SECONDARY（次要操作色）
+     輔助按鈕、次級操作的填色。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-secondary:    var(--chimes-ref-color-gray-100);
+  /* Secondary 元件的背景 */
+  --chimes-sys-color-on-secondary: var(--chimes-ref-color-gray-900);
+  /* Secondary 背景上的文字 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · MUTED（靜音 / 降優先色）
+     停用背景、佔位填色、降低視覺優先級的場景。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-muted:    var(--chimes-ref-color-gray-100);
+  /* Muted 元件的背景（停用、唯讀） */
+  --chimes-sys-color-on-muted: var(--chimes-ref-color-gray-500);
+  /* Muted 背景上的文字 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · ACCENT（輕度強調色）
+     Hover 狀態背景、輕微突顯，傳達「可互動」但不搶主色。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-accent:    var(--chimes-ref-color-gray-100);
+  /* Hover 狀態的輕量背景 */
+  --chimes-sys-color-on-accent: var(--chimes-ref-color-gray-900);
+  /* Accent 背景上的文字 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · BORDER & INPUT（結構線條色）
+     ---------------------------------------------------------- */
+  --chimes-sys-color-border: var(--chimes-ref-color-gray-200);
+  /* 卡片邊框、分隔線、表格列線 */
+  --chimes-sys-color-input:  var(--chimes-ref-color-gray-200);
+  /* 輸入框邊框色（通常與 border 同值，獨立命名便於單獨覆蓋） */
+  --chimes-sys-color-ring:   var(--chimes-ref-color-brand-primary);
+  /* 鍵盤焦點環（focus ring），品牌藍，必須清晰可見以符合 WCAG AA */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · ERROR（錯誤 / 危險狀態）
+     唯一高飽和紅色系，語意專一：刪除、不可逆操作、表單錯誤。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-error:        var(--chimes-ref-color-red-600);
+  /* 錯誤邊框、Destructive 按鈕文字、aria-invalid 狀態 */
+  --chimes-sys-color-error-subtle: var(--chimes-ref-color-red-50);
+  /* 錯誤提示的輕量背景（行內錯誤訊息底色） */
+  --chimes-sys-color-on-error:     var(--chimes-ref-color-gray-50);
+  /* Error 實色背景上的文字（如 Error Toast） */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · SUCCESS（成功狀態）
+     操作完成、資料驗證通過、正向回饋。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-success:        var(--chimes-ref-color-green-600);
+  /* 成功圖示、Success Badge 邊框 */
+  --chimes-sys-color-success-subtle: var(--chimes-ref-color-green-50);
+  /* 成功提示的輕量背景 */
+  --chimes-sys-color-on-success:     var(--chimes-ref-color-gray-50);
+  /* Success 實色背景上的文字 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · WARNING（警告狀態）
+     需要注意但非錯誤：配額接近上限、功能即將棄用。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-warning:        var(--chimes-ref-color-amber-600);
+  /* 警告圖示、Warning Badge 邊框 */
+  --chimes-sys-color-warning-subtle: var(--chimes-ref-color-amber-50);
+  /* 警告提示的輕量背景 */
+  --chimes-sys-color-on-warning:     var(--chimes-ref-color-gray-950);
+  /* Warning 背景上的文字（深色確保對比，Amber 系不用白字） */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · INFO（資訊提示狀態）
+     說明性資訊、功能介紹、非緊急通知。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-info:        var(--chimes-ref-color-blue-600);
+  /* 資訊圖示、Info Badge 邊框 */
+  --chimes-sys-color-info-subtle: var(--chimes-ref-color-blue-50);
+  /* 資訊提示的輕量背景 */
+  --chimes-sys-color-on-info:     var(--chimes-ref-color-gray-0);
+  /* Info 實色背景上的文字 */
+
+  /* ----------------------------------------------------------
+     SYS · COLOR · CHART（資料視覺化色系）
+     藍色調漸層五級，確保同色系內可區分。
+     由淺到深依序為重要性遞增的數列。
+     ---------------------------------------------------------- */
+  --chimes-sys-color-chart-1: var(--chimes-ref-color-blue-300); /* 低優先數列 */
+  --chimes-sys-color-chart-2: var(--chimes-ref-color-blue-400); /* 次要數列 */
+  --chimes-sys-color-chart-3: var(--chimes-ref-color-blue-500); /* 主要數列 */
+  --chimes-sys-color-chart-4: var(--chimes-ref-color-blue-600); /* 強調數列 */
+  --chimes-sys-color-chart-5: var(--chimes-ref-color-blue-700); /* 最重要數列 / 目標值 */
+  --chimes-sys-color-chart-6: var(--chimes-ref-color-amber-500); /* 對比強調（暖色系，用於警示或對比數列） */
+
+  /* ----------------------------------------------------------
+     SYS · SPACING（語意化間距）
+     將 ref 間距數值賦予「場景語意」，降低決策成本。
+     ---------------------------------------------------------- */
+  --chimes-sys-spacing-icon-gap:     var(--chimes-ref-spacing-1-5);
+  /* 圖示與相鄰文字的間距（6px）*/
+  --chimes-sys-spacing-inline-gap:   var(--chimes-ref-spacing-2);
+  /* 行內元素之間的間距（8px）*/
+  --chimes-sys-spacing-component-xs: var(--chimes-ref-spacing-1);
+  /* 元件內最小填充（4px）—— 徽章垂直內距 */
+  --chimes-sys-spacing-component-sm: var(--chimes-ref-spacing-2);
+  /* 元件小型填充（8px）—— 按鈕垂直內距 */
+  --chimes-sys-spacing-component-md: var(--chimes-ref-spacing-2-5);
+  /* 元件標準填充（10px）—— 按鈕水平內距、輸入框內距 */
+  --chimes-sys-spacing-component-lg: var(--chimes-ref-spacing-4);
+  /* 元件大型填充（16px）—— 卡片、面板內距 */
+  --chimes-sys-spacing-section-gap:  var(--chimes-ref-spacing-4);
+  /* 同一頁面內的區塊間距（16px）—— 卡片之間 */
+  --chimes-sys-spacing-page-gap:     var(--chimes-ref-spacing-8);
+  /* 頁面主要區段分隔（32px）*/
+
+  /* ----------------------------------------------------------
+     SYS · RADIUS（語意化圓角）
+     按「元件類型角色」命名，不以數值命名。
+     ---------------------------------------------------------- */
+  --chimes-sys-radius-inline:    var(--chimes-ref-radius-sm);
+  /* 行內元素：Tag、小型指示點、Chip（6px）*/
+  --chimes-sys-radius-control:   var(--chimes-ref-radius-md);
+  /* 表單控制項：Input、Select、Textarea（8px）*/
+  --chimes-sys-radius-action:    var(--chimes-ref-radius-lg);
+  /* 操作元件：Button、Tab（10px，系統基準值）*/
+  --chimes-sys-radius-container: var(--chimes-ref-radius-xl);
+  /* 容器層：Card、Panel、Drawer（14px）*/
+  --chimes-sys-radius-overlay:   var(--chimes-ref-radius-2xl);
+  /* 疊加層：Modal、Dialog（18px）*/
+  --chimes-sys-radius-badge:     var(--chimes-ref-radius-pill);
+  /* 標籤型：Badge、Status Tag（9999px 全圓）*/
+
+  /* ----------------------------------------------------------
+     SYS · SHADOW（語意化陰影）
+     ---------------------------------------------------------- */
+  --chimes-sys-shadow-card:      var(--chimes-ref-shadow-sm);
+  /* 卡片預設陰影，輕微拉開層次 */
+  --chimes-sys-shadow-card-hover: var(--chimes-ref-shadow-md);
+  /* 可互動卡片 Hover 陰影 */
+  --chimes-sys-shadow-dropdown:  var(--chimes-ref-shadow-md);
+  /* 下拉選單、Tooltip 陰影 */
+  --chimes-sys-shadow-overlay:   var(--chimes-ref-shadow-lg);
+  /* Modal、抽屜陰影 */
+}
+
+
+/* ============================================================
+   LAYER 2 — SYS TOKENS · 深色主題覆蓋（Dark Theme）
+   只覆蓋 sys 層，comp 層自動繼承新值。
+   ============================================================ */
+
+.dark {
+  /* Surface */
+  --chimes-sys-color-background:     var(--chimes-ref-color-gray-950);
+  /* 深色頁面底色 */
+  --chimes-sys-color-surface:        var(--chimes-ref-color-gray-900);
+  /* 深色卡片底色，比 background 亮一層 */
+  --chimes-sys-color-surface-raised: var(--chimes-ref-color-gray-800);
+  /* 深色彈出層底色 */
+
+  /* Foreground */
+  --chimes-sys-color-foreground:          var(--chimes-ref-color-gray-50);
+  /* 深色主題主文字：近白 */
+  --chimes-sys-color-foreground-subtle:   var(--chimes-ref-color-gray-400);
+  /* 深色主題輔助文字 */
+  --chimes-sys-color-foreground-disabled: var(--chimes-ref-color-gray-600);
+  /* 深色主題停用文字 */
+
+  /* Primary（深色主題 Primary 使用品牌藍） */
+  --chimes-sys-color-primary:    var(--chimes-ref-color-blue-600);
+  /* 深色主題 Primary 背景：品牌藍 */
+  --chimes-sys-color-on-primary: var(--chimes-ref-color-gray-0);
+  /* 深色主題 Primary 上的文字：白色 */
+
+  /* Secondary */
+  --chimes-sys-color-secondary:    var(--chimes-ref-color-gray-800);
+  --chimes-sys-color-on-secondary: var(--chimes-ref-color-gray-50);
+
+  /* Muted / Accent */
+  --chimes-sys-color-muted:    var(--chimes-ref-color-gray-800);
+  --chimes-sys-color-on-muted: var(--chimes-ref-color-gray-400);
+  --chimes-sys-color-accent:   var(--chimes-ref-color-gray-700);
+
+  /* Border（深色主題用半透明白邊，融入深色背景） */
+  --chimes-sys-color-border: rgba(255, 255, 255, 0.10);
+  /* 深色主題邊框：10% 白色 */
+  --chimes-sys-color-input:  rgba(255, 255, 255, 0.15);
+  /* 深色主題輸入框邊框：15% 白色，比 border 稍亮 */
+  --chimes-sys-color-ring:   var(--chimes-ref-color-blue-600);
+  /* 深色主題焦點環：品牌藍 */
+
+  /* Status Colors（深色主題使用較亮的色階） */
+  --chimes-sys-color-error:          var(--chimes-ref-color-red-400);
+  --chimes-sys-color-error-subtle:   color-mix(in oklch, var(--chimes-ref-color-red-400) 15%, transparent);
+  --chimes-sys-color-success:        var(--chimes-ref-color-green-500);
+  --chimes-sys-color-success-subtle: color-mix(in oklch, var(--chimes-ref-color-green-500) 15%, transparent);
+  --chimes-sys-color-warning:        var(--chimes-ref-color-amber-500);
+  --chimes-sys-color-warning-subtle: color-mix(in oklch, var(--chimes-ref-color-amber-500) 15%, transparent);
+  --chimes-sys-color-info:           var(--chimes-ref-color-blue-400);
+  --chimes-sys-color-info-subtle:    color-mix(in oklch, var(--chimes-ref-color-blue-400) 15%, transparent);
+}
+
+
+/* ============================================================
+   LAYER 3 — COMPONENT TOKENS（元件專屬屬性）
+   ⚠️  只引用 sys 層，不可跳過引用 ref 層。
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   COMP · BUTTON · PRIMARY（主要按鈕）
+   最高優先級的操作按鈕，對應 variant="default"。
+   ---------------------------------------------------------- */
+
+:root {
+  /* Default 狀態 */
+  --chimes-comp-btn-primary-bg:           var(--chimes-sys-color-primary);
+  /* 預設背景：主色（淺色主題為深黑） */
+  --chimes-comp-btn-primary-fg:           var(--chimes-sys-color-on-primary);
+  /* 預設文字：主色的對比前景色 */
+  --chimes-comp-btn-primary-border-color: transparent;
+  /* 邊框透明（佔位，防止 hover/focus 時發生 layout shift） */
+  --chimes-comp-btn-primary-border-width: var(--chimes-ref-border-width-1);
+  /* 邊框粗細 1px */
+  --chimes-comp-btn-primary-radius:       var(--chimes-sys-radius-action);
+  /* 圓角 10px，操作元件語意 */
+  --chimes-comp-btn-primary-height:       2rem;
+  /* 高度 32px（default size），觸控目標最小 44px 需另確認 */
+  --chimes-comp-btn-primary-px:           var(--chimes-sys-spacing-component-md);
+  /* 水平內距 10px */
+  --chimes-comp-btn-primary-gap:          var(--chimes-sys-spacing-icon-gap);
+  /* 圖示與文字間距 6px */
+  --chimes-comp-btn-primary-font-size:    var(--chimes-ref-font-size-sm);
+  /* 字級 14px */
+  --chimes-comp-btn-primary-font-weight:  var(--chimes-ref-font-weight-medium);
+  /* 字重 500，突顯操作性 */
+
+  /* Hover 狀態：背景降低 20% 透明度，保持色相不變 */
+  --chimes-comp-btn-primary-hover-bg:
+    color-mix(in oklch, var(--chimes-sys-color-primary) 80%, transparent);
+  /* 主色 80% + 透明 20%，比 default 稍淺傳達懸停回饋 */
+
+  /* Pressed 狀態：比 Hover 再深 10%，傳達「按下」物理感 */
+  --chimes-comp-btn-primary-pressed-bg:
+    color-mix(in oklch, var(--chimes-sys-color-primary) 70%, transparent);
+
+  /* Focus Visible 狀態（鍵盤聚焦） */
+  --chimes-comp-btn-primary-focus-border-color: var(--chimes-sys-color-ring);
+  /* 聚焦邊框顯示，顏色與 ring 一致 */
+  --chimes-comp-btn-primary-focus-ring-color:
+    color-mix(in oklch, var(--chimes-sys-color-ring) 50%, transparent);
+  /* 外框光暈：50% 透明度，清晰可見但不遮蓋背景 */
+  --chimes-comp-btn-primary-focus-ring-width:  3px;
+  /* 聚焦環寬度（符合 WCAG AA 最低 2px 要求） */
+
+  /* Disabled 狀態：整體降低不透明度，通用於所有主題 */
+  --chimes-comp-btn-primary-disabled-opacity: 0.5;
+  /* 所有顏色自動變淡，無需逐主題定義 */
+  --chimes-comp-btn-primary-disabled-cursor:  not-allowed;
+
+  /* Invalid 狀態（aria-invalid，表單送出錯誤時） */
+  --chimes-comp-btn-primary-invalid-border-color: var(--chimes-sys-color-error);
+  /* 錯誤邊框改為警示紅 */
+  --chimes-comp-btn-primary-invalid-ring-color:
+    color-mix(in oklch, var(--chimes-sys-color-error) 20%, transparent);
+  /* 錯誤光暈：低透明度警示紅 */
+
+  /* ── Button 尺寸 Tokens ── */
+
+  /* XS（超小，密集列表、行內操作） */
+  --chimes-comp-btn-size-xs-height:      1.5rem;  /* 24px */
+  --chimes-comp-btn-size-xs-px:          var(--chimes-ref-spacing-2);
+  --chimes-comp-btn-size-xs-gap:         var(--chimes-ref-spacing-1);
+  --chimes-comp-btn-size-xs-font-size:   var(--chimes-ref-font-size-xs);
+  --chimes-comp-btn-size-xs-radius:      var(--chimes-sys-radius-control);
+
+  /* SM（小型，次要操作） */
+  --chimes-comp-btn-size-sm-height:      1.75rem; /* 28px */
+  --chimes-comp-btn-size-sm-px:          var(--chimes-ref-spacing-2-5);
+  --chimes-comp-btn-size-sm-gap:         var(--chimes-ref-spacing-1);
+  --chimes-comp-btn-size-sm-font-size:   0.8rem;  /* 12.8px */
+  --chimes-comp-btn-size-sm-radius:      var(--chimes-sys-radius-control);
+
+  /* Default（標準，絕大多數場景） */
+  --chimes-comp-btn-size-default-height:      2rem;   /* 32px */
+  --chimes-comp-btn-size-default-px:          var(--chimes-ref-spacing-2-5);
+  --chimes-comp-btn-size-default-gap:         var(--chimes-ref-spacing-1-5);
+  --chimes-comp-btn-size-default-font-size:   var(--chimes-ref-font-size-sm);
+  --chimes-comp-btn-size-default-radius:      var(--chimes-sys-radius-action);
+
+  /* LG（大型，登入頁、Hero CTA） */
+  --chimes-comp-btn-size-lg-height:      2.25rem; /* 36px */
+  --chimes-comp-btn-size-lg-px:          var(--chimes-ref-spacing-3);
+  --chimes-comp-btn-size-lg-gap:         var(--chimes-ref-spacing-1-5);
+  --chimes-comp-btn-size-lg-font-size:   var(--chimes-ref-font-size-sm);
+  --chimes-comp-btn-size-lg-radius:      var(--chimes-sys-radius-action);
+}
+
+
+/* ----------------------------------------------------------
+   COMP · INPUT（文字輸入框）
+   用於所有表單輸入場景，包含五個狀態。
+   ---------------------------------------------------------- */
+
+:root {
+  /* Default 狀態 */
+  --chimes-comp-input-bg:              var(--chimes-sys-color-surface);
+  /* 輸入框底色：白色 Surface */
+  --chimes-comp-input-fg:              var(--chimes-sys-color-foreground);
+  /* 使用者輸入的文字顏色 */
+  --chimes-comp-input-placeholder-fg:        var(--chimes-sys-color-foreground-subtle);
+  /* Placeholder 提示文字顏色（比正文淺）*/
+  --chimes-comp-input-placeholder-font-size: var(--chimes-ref-font-size-sm);
+  /* Placeholder 字級 14px，與輸入文字相同 */
+  --chimes-comp-input-border-color:    var(--chimes-sys-color-input);
+  /* 輸入框邊框顏色 */
+  --chimes-comp-input-border-width:    var(--chimes-ref-border-width-1);
+  /* 邊框粗細 1px */
+  --chimes-comp-input-radius:          var(--chimes-sys-radius-action);
+  /* 圓角 10px（rounded-lg），與 Card / Badge 統一 */
+  --chimes-comp-input-height:          2.5rem;
+  /* 高度 40px（預設） */
+  --chimes-comp-input-height-sm:       2rem;
+  /* 高度 32px，緊湊表格 / 設定列 */
+  --chimes-comp-input-height-md:       2.25rem;
+  /* 高度 36px，Toolbar 搜尋列 */
+  --chimes-comp-input-height-lg:       3rem;
+  /* 高度 48px，大型搜尋欄 */
+  --chimes-comp-input-font-size-lg:    var(--chimes-ref-font-size-base);
+  /* 字級 16px，大型搜尋欄用 */
+  --chimes-comp-input-px:              var(--chimes-sys-spacing-component-md);
+  /* 水平內距 10px */
+  --chimes-comp-input-py:              var(--chimes-sys-spacing-component-sm);
+  /* 垂直內距 8px */
+  --chimes-comp-input-font-size:       var(--chimes-ref-font-size-sm);
+  /* 字級 14px（行動裝置自動放大至 16px 防縮放） */
+  --chimes-comp-input-font-weight:     var(--chimes-ref-font-weight-normal);
+  /* 字重 400，輸入文字用正常字重 */
+
+  /* Hover 狀態 */
+  --chimes-comp-input-hover-border-color: var(--chimes-sys-color-foreground-disabled);
+  /* Hover 邊框略深，回饋「可互動」*/
+
+  /* Focus 狀態 */
+  --chimes-comp-input-focus-border-color: var(--chimes-sys-color-ring);
+  /* 聚焦邊框顯示為 ring 色 */
+  --chimes-comp-input-focus-ring-color:
+    color-mix(in oklch, var(--chimes-sys-color-ring) 50%, transparent);
+  /* 外框光暈：半透明聚焦環 */
+  --chimes-comp-input-focus-ring-width:   3px;
+
+  /* Disabled 狀態 */
+  --chimes-comp-input-disabled-bg:            var(--chimes-sys-color-muted);
+  /* 停用背景：Muted 灰，傳達「不可互動」*/
+  --chimes-comp-input-disabled-fg:            var(--chimes-sys-color-foreground-disabled);
+  /* 停用文字色：淡化 */
+  --chimes-comp-input-disabled-border-color:  var(--chimes-sys-color-border);
+  /* 停用邊框：正常邊框色（不強調） */
+  --chimes-comp-input-disabled-cursor:        not-allowed;
+  --chimes-comp-input-disabled-opacity:       0.6;
+
+  /* Error 狀態（aria-invalid 或表單驗證失敗） */
+  --chimes-comp-input-error-border-color: var(--chimes-sys-color-error);
+  /* 錯誤邊框：警示紅 */
+  --chimes-comp-input-error-ring-color:
+    color-mix(in oklch, var(--chimes-sys-color-error) 20%, transparent);
+  /* 錯誤光暈：低透明度警示紅 */
+  --chimes-comp-input-error-fg:           var(--chimes-sys-color-foreground);
+  /* 錯誤狀態下文字色不變 */
+
+  /* Success 狀態（表單驗證通過） */
+  --chimes-comp-input-success-border-color: var(--chimes-sys-color-success);
+  /* 成功邊框：綠色 */
+  --chimes-comp-input-success-ring-color:
+    color-mix(in oklch, var(--chimes-sys-color-success) 20%, transparent);
+  /* 成功光暈：低透明度綠色 */
+}
+
+
+/* ----------------------------------------------------------
+   COMP · CARD（卡片容器）
+   B2B 介面的核心佈局容器，承載各種內容模組。
+   ---------------------------------------------------------- */
+
+:root {
+  /* 基本外觀 */
+  --chimes-comp-card-bg:           var(--chimes-sys-color-surface);
+  /* 卡片底色：白色（比頁面背景亮一層，建立空間層次） */
+  --chimes-comp-card-fg:           var(--chimes-sys-color-foreground);
+  /* 卡片內預設文字色 */
+  --chimes-comp-card-border-color: var(--chimes-sys-color-border);
+  /* 卡片邊框：淺灰（`#DBDDE0`），清晰不喧賓奪主 */
+  --chimes-comp-card-border-width: var(--chimes-ref-border-width-1);
+  /* 邊框粗細 1px */
+  --chimes-comp-card-radius:       var(--chimes-sys-radius-action);
+  /* 圓角 10px（rounded-lg），與 Input / Badge 統一 */
+  --chimes-comp-card-shadow:       var(--chimes-sys-shadow-card);
+  /* 輕微陰影，視覺拉開卡片與背景的層次 */
+  --chimes-comp-card-padding:      var(--chimes-sys-spacing-component-lg);
+  /* 卡片內距 16px（統一 padding 快捷用） */
+
+  /* Header 區塊 */
+  --chimes-comp-card-header-px:          var(--chimes-sys-spacing-component-lg);
+  /* Header 水平內距 16px */
+  --chimes-comp-card-header-py:          var(--chimes-sys-spacing-component-lg);
+  /* Header 垂直內距 16px */
+  --chimes-comp-card-header-gap:         var(--chimes-ref-spacing-1-5);
+  /* Title 與 Description 之間的間距 6px */
+  --chimes-comp-card-title-color:        var(--chimes-sys-color-foreground);
+  /* 卡片標題文字顏色 */
+  --chimes-comp-card-title-size:         var(--chimes-ref-font-size-base);
+  /* 卡片標題字級 16px */
+  --chimes-comp-card-title-weight:       var(--chimes-ref-font-weight-medium);
+  /* 卡片標題字重 500 */
+  --chimes-comp-card-description-color:  var(--chimes-sys-color-foreground-subtle);
+  /* 卡片說明文字顏色（灰色輔助） */
+  --chimes-comp-card-description-size:   var(--chimes-ref-font-size-sm);
+  /* 卡片說明字級 14px */
+
+  /* Body 區塊 */
+  --chimes-comp-card-body-px:  var(--chimes-sys-spacing-component-lg);
+  /* Body 水平內距 16px */
+  --chimes-comp-card-body-py:  var(--chimes-sys-spacing-component-lg);
+  /* Body 垂直內距 16px */
+  --chimes-comp-card-body-gap: var(--chimes-sys-spacing-section-gap);
+  /* Body 內部元素間距 16px */
+
+  /* Footer 區塊 */
+  --chimes-comp-card-footer-px: var(--chimes-sys-spacing-component-lg);
+  /* Footer 水平內距 16px */
+  --chimes-comp-card-footer-py: var(--chimes-sys-spacing-component-lg);
+  /* Footer 垂直內距 16px */
+
+  /* Small Variant（緊湊卡片，適合 Dashboard Widget） */
+  --chimes-comp-card-small-radius:     var(--chimes-sys-radius-action);
+  /* 小型卡片圓角縮減至 10px */
+  --chimes-comp-card-small-padding:    var(--chimes-ref-spacing-3);
+  /* 小型卡片內距縮減至 12px */
+  --chimes-comp-card-small-title-size: var(--chimes-ref-font-size-sm);
+  /* 小型卡片標題縮減至 14px */
+
+  /* Interactive Variant（可點擊卡片，如選擇列表） */
+  --chimes-comp-card-interactive-hover-bg:     var(--chimes-sys-color-accent);
+  /* 可互動卡片 Hover 背景：Accent 淺灰 */
+  --chimes-comp-card-interactive-hover-shadow: var(--chimes-sys-shadow-card-hover);
+  /* 可互動卡片 Hover 陰影加深 */
+  --chimes-comp-card-interactive-focus-ring:
+    color-mix(in oklch, var(--chimes-sys-color-ring) 50%, transparent);
+  /* 可互動卡片鍵盤聚焦環 */
+}
+
+
+/* ----------------------------------------------------------
+   COMP · BADGE（全圓角狀態標籤）
+   用於狀態指示、計數、分類標記。全圓角設計強調「標籤」語意。
+   6 種 variant 對應語意角色，不應單純作裝飾用途。
+   ---------------------------------------------------------- */
+
+:root {
+  /* 基本外觀 */
+  --chimes-comp-badge-radius:  var(--chimes-sys-radius-action);
+  /* 圓角 10px（rounded-lg），與 Card / Input 統一 */
+  --chimes-comp-badge-height:  1.25rem;
+  /* 固定高度 20px，確保多個 Badge 並排時對齊 */
+  --chimes-comp-badge-px:      var(--chimes-ref-spacing-2);
+  /* 水平內距 8px */
+  --chimes-comp-badge-font-size:   var(--chimes-ref-font-size-xs);
+  /* 字級 12px，縮小以符合輔助資訊角色 */
+  --chimes-comp-badge-font-weight: var(--chimes-ref-font-weight-medium);
+  /* 字重 500，確保小字級下的可讀性 */
+
+  /* Default variant（主要強調，使用 Primary 色） */
+  --chimes-comp-badge-default-bg:     var(--chimes-sys-color-primary);
+  /* 主色填充背景 */
+  --chimes-comp-badge-default-fg:     var(--chimes-sys-color-on-primary);
+  /* 主色背景上的文字，確保對比度 */
+  --chimes-comp-badge-default-border: transparent;
+  /* 無邊框 */
+
+  /* Secondary variant（次要資訊，低視覺重量） */
+  --chimes-comp-badge-secondary-bg:     var(--chimes-sys-color-secondary);
+  /* 淺灰背景 */
+  --chimes-comp-badge-secondary-fg:     var(--chimes-sys-color-on-secondary);
+  /* 深色文字 */
+  --chimes-comp-badge-secondary-border: transparent;
+
+  /* Destructive variant（警告 / 錯誤語意） */
+  --chimes-comp-badge-destructive-bg:
+    color-mix(in oklch, var(--chimes-sys-color-error) 10%, transparent);
+  /* 低透明度紅色背景，不過於強烈 */
+  --chimes-comp-badge-destructive-fg:     var(--chimes-sys-color-error);
+  /* 紅色文字，直接傳達錯誤語意 */
+  --chimes-comp-badge-destructive-border: transparent;
+
+  /* Outline variant（邊框型，不搶視覺焦點） */
+  --chimes-comp-badge-outline-bg:     transparent;
+  /* 無背景填色 */
+  --chimes-comp-badge-outline-fg:     var(--chimes-sys-color-foreground);
+  /* 與正文相同顏色 */
+  --chimes-comp-badge-outline-border: var(--chimes-sys-color-border);
+  /* 細灰邊框 */
+
+  /* Focus ring（Badge 作為連結時的鍵盤聚焦） */
+  --chimes-comp-badge-focus-ring-color:
+    color-mix(in oklch, var(--chimes-sys-color-ring) 50%, transparent);
+  --chimes-comp-badge-focus-ring-width: 3px;
+}
+
+
+/* ----------------------------------------------------------
+   COMP · DIALOG（對話框）
+   模態視窗，用於需要使用者明確操作的確認、表單、詳情展示。
+   分為 Confirmation 與 Form 兩種模式。
+   ---------------------------------------------------------- */
+
+:root {
+  /* 外觀 */
+  --chimes-comp-dialog-radius:    var(--chimes-sys-radius-overlay);
+  /* 圓角 18px，疊加層語意，比卡片更大以突顯層級 */
+  --chimes-comp-dialog-shadow:    var(--chimes-sys-shadow-overlay);
+  /* 大陰影，強化疊加感 */
+  --chimes-comp-dialog-bg:        var(--chimes-sys-color-surface);
+  /* 對話框底色：白色 Surface */
+  --chimes-comp-dialog-fg:        var(--chimes-sys-color-foreground);
+  /* 對話框內文字色 */
+  --chimes-comp-dialog-border-color: var(--chimes-sys-color-border);
+  /* 細邊框：搭配 ring-1 使用 */
+
+  /* Overlay（背景遮罩） */
+  --chimes-comp-dialog-overlay-bg: oklch(0 0 0 / 10%);
+  /* 半透明黑色遮罩，搭配 backdrop-blur 模糊背景 */
+
+  /* 尺寸 */
+  --chimes-comp-dialog-max-width-sm:      24rem;
+  /* 小型確認框 384px，限制資訊量，避免過寬 */
+  --chimes-comp-dialog-max-width-default: 32rem;
+  /* 預設寬度 512px，適用多數表單對話框 */
+  --chimes-comp-dialog-max-width-lg:      48rem;
+  /* 大型對話框 768px，用於複雜表單 */
+
+  /* 內距 */
+  --chimes-comp-dialog-padding: var(--chimes-sys-spacing-component-lg);
+  /* 對話框內距 16px */
+
+  /* Header */
+  --chimes-comp-dialog-title-size:   var(--chimes-ref-font-size-base);
+  /* 標題 16px，不需過大，對話框本身已有聚焦感 */
+  --chimes-comp-dialog-title-weight: var(--chimes-ref-font-weight-medium);
+  /* 標題字重 500 */
+
+  /* Footer（操作區） */
+  --chimes-comp-dialog-footer-bg:  var(--chimes-sys-color-muted);
+  /* Footer 淺灰背景，與主體視覺區分 */
+  --chimes-comp-dialog-footer-gap: var(--chimes-ref-spacing-2);
+  /* 按鈕間距 8px */
+}
