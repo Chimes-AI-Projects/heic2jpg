@@ -10,7 +10,7 @@ interface IAppHeaderProps {
 
 export function AppHeader({ resolvedTheme }: IAppHeaderProps) {
   const { formatMessage } = useIntl();
-  const markSrc = resolvedTheme === 'dark' ? '/mark-light.svg' : '/mark-dark.svg';
+  const markSrc = resolvedTheme === 'dark' ? `${import.meta.env.BASE_URL}mark-light.svg` : `${import.meta.env.BASE_URL}mark-dark.svg`;
 
   return (
     <header className="border-b border-border bg-card">

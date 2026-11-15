@@ -12,7 +12,7 @@
 
 ## 網頁 App
 
-以 [Chimes AI Design System](../../Chimes-AI-Design-System) 打造的單頁應用。**所有轉檔都在瀏覽器內完成，照片不會上傳到任何伺服器。**
+以 [Chimes AI Design System](../Chimes-AI-Design-System) 打造的單頁應用。**所有轉檔都在瀏覽器內完成，照片不會上傳到任何伺服器。**
 
 ### 功能
 

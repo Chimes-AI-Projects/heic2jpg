@@ -5,6 +5,8 @@ import tailwindcss from "@tailwindcss/vite"
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Relative base so the build works on GitHub Pages (/heic2jpg/) or any sub-path
+  base: './',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
