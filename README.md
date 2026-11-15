@@ -2,6 +2,8 @@
 
 把 iPhone 拍的 `.HEIC` / `.HEIF` 照片批次轉檔的小工具，有兩種用法：
 
+**👉 線上直接使用：<https://chimes-ai-projects.github.io/heic2jpg/>**（不用安裝，Mac / Windows / Linux 都能用）
+
 | | 網頁 App（`app/`） | 命令列腳本（`heic2png.sh`） |
 |---|---|---|
 | 輸出 | **JPG**（品質 85、長邊最大 2048px） | PNG（原尺寸、無損） |
@@ -13,6 +15,8 @@
 ## 網頁 App
 
 以 [Chimes AI Design System](../Chimes-AI-Design-System) 打造的單頁應用。**所有轉檔都在瀏覽器內完成，照片不會上傳到任何伺服器。**
+
+線上版：<https://chimes-ai-projects.github.io/heic2jpg/>（`main` 分支每次 push 會由 GitHub Actions 自動檢查、建置並部署，見 [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml)）
 
 ### 功能
 
@@ -35,6 +39,22 @@
 實測一張 4032×4032 照片：無損 PNG 約 16.6MB → 本工具輸出約 0.1–0.3MB。
 
 要調整規格，修改 [`app/src/constants/index.ts`](app/src/constants/index.ts) 的 `JPEG_QUALITY`、`OUTPUT_MAX_EDGE` 即可。
+
+### 支援平台
+
+HEIC 解碼用的是編譯成 WebAssembly 的 libheif，JPG 由瀏覽器原生 Canvas 產生，不依賴作業系統，也**不需要安裝 Windows 的 HEIF 擴充功能**。
+
+| 平台 | 選擇檔案 | 選擇資料夾 / 拖曳資料夾 | 備註 |
+|---|---|---|---|
+| macOS（Chrome / Edge / Firefox / Safari） | ✅ | ✅ | 已在 Chromium 內核瀏覽器實測 |
+| Windows / Linux / ChromeOS（新版 Chrome / Edge / Firefox） | ✅ | ✅ | 依瀏覽器功能推斷，尚未實測 |
+| Android | ✅ | ❌（行動瀏覽器通常不支援） | 尚未實測 |
+| iPhone / iPad | ✅ | ❌ | 從「照片」選取時 iOS 常會先自動轉成 JPG，工具會視為非 HEIC 而略過；要從「檔案」App 選原始 HEIC 檔 |
+
+注意事項：
+
+- 第一次轉檔會下載約 3.2MB 的解碼程式，之後由瀏覽器快取
+- 記憶體較小的電腦或手機一次轉幾百張可能變慢（程式一次只轉 2 張，一般不會有問題）
 
 ### 啟動
 
